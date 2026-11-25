@@ -6,5 +6,5 @@ Thank you to everyone helping build Campus Mesh.
 - [Dankwa-Wadie](https://github.com/Dankwa-Wadie)
 
 ## Campus scans
-- Form Test (Block B)
 <!-- Add one line per contributor once their scan is used: - Name (Place filmed) -->
+_Be the first: [submit a scan](README.md#how-to-contribute-a-scan)._

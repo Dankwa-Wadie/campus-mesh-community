@@ -1,0 +1,43 @@
+name: Import Google Form scans
+
+# Every 30 minutes, new Google Form responses become scan issues, so people without a GitHub
+# account go through the same review and auto-credit. FORM_CSV_URL is the response sheet
+# published as CSV; it's a secret because anyone with it can read the responses.
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+concurrency: import-form
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/import-form.test.js
+      - uses: actions/github-script@v7
+        env:
+          FORM_CSV_URL: ${{ secrets.FORM_CSV_URL }}
+        with:
+          script: |
+            const { responses, issueBody, marker } = require('./scripts/import-form.js');
+            if (!process.env.FORM_CSV_URL) { core.notice('FORM_CSV_URL not set; nothing to import.'); return; }
+            const res = await fetch(process.env.FORM_CSV_URL);
+            if (!res.ok) throw new Error(`Could not read the response sheet: HTTP ${res.status}`);
+            const rows = responses(await res.text());
+            const existing = await github.paginate(github.rest.issues.listForRepo,
+              { ...context.repo, labels: 'scan', state: 'all', per_page: 100 });
+            const seen = new Set(existing.map(i => i.body || ''));
+            let created = 0;
+            for (const r of rows) {
+              if (!r['Timestamp'] || !r['Agreement']) continue;
+              if ([...seen].some(b => b.includes(marker(r)))) continue;
+              await github.rest.issues.create({ ...context.repo,
+                title: `Scan: ${(r['Place'] || 'Campus').slice(0, 60)}`, labels: ['scan'], body: issueBody(r) });
+              created++;
+            }
+            core.notice(`Imported ${created} new form response(s).`);

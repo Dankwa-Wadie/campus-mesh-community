@@ -1,0 +1,54 @@
+name: Submit a place scan
+description: Send us a video of a campus place to help build the 3D map.
+title: "Scan: "
+labels: ["scan"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for helping! Please read the [capture guide](../blob/main/CAPTURE_GUIDE.md) first."
+  - type: dropdown
+    id: place
+    attributes:
+      label: Place
+      options:
+        - Main Gate
+        - Administration Block
+        - Block A
+        - Block B
+        - Silicon Valley Block
+        - Graduate Block (G6)
+        - GE Block
+        - Cafeteria
+        - University Library
+        - Central Quad
+        - Other (say which below)
+    validations:
+      required: true
+  - type: input
+    id: detail
+    attributes:
+      label: Floor, room or entrance
+      placeholder: "e.g. Floor 1 corridor, started at the main entrance"
+  - type: input
+    id: link
+    attributes:
+      label: Video link
+      description: Google Drive, OneDrive or WeTransfer link, with sharing turned on.
+    validations:
+      required: true
+  - type: input
+    id: credit
+    attributes:
+      label: Name to credit
+      description: Shown in CONTRIBUTORS.md if your scan is used. Leave blank to stay anonymous.
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Agreement
+      options:
+        - label: I filmed this video myself.
+          required: true
+        - label: It doesn't focus on anyone's face or film private rooms.
+          required: true
+        - label: Campus Mesh may use it for the campus map under CC BY 4.0.
+          required: true

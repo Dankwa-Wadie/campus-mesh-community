@@ -1,0 +1,47 @@
+name: Credit accepted scans
+
+# Runs when a maintainer adds the "accepted" label. Only people with write access can label
+# issues, so a submitter can't credit themselves.
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: credit # one edit to CONTRIBUTORS.md at a time
+
+jobs:
+  credit:
+    if: github.event.label.name == 'accepted'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/credit.test.js
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const { field, clean, addCredit } = require('./scripts/credit.js');
+            const issue = context.payload.issue;
+            const name = clean(field(issue.body, 'Name to credit'));
+            let place = clean(field(issue.body, 'Place'));
+            if (place.startsWith('Other')) place = clean(field(issue.body, 'Floor, room or entrance')) || 'Campus';
+            const updated = addCredit(fs.readFileSync('CONTRIBUTORS.md', 'utf8'), name, place);
+            if (updated) fs.writeFileSync('CONTRIBUTORS.md', updated);
+            core.exportVariable('CREDITED', updated ? name : '');
+            const thanks = name
+              ? (updated ? `Thank you! Your scan is being used, and **${name}** has been added to [CONTRIBUTORS.md](../blob/main/CONTRIBUTORS.md).`
+                         : `Thank you! Your scan is being used. **${name}** was already credited.`)
+              : 'Thank you! Your scan is being used. You asked to stay anonymous, so no name was added.';
+            await github.rest.issues.createComment({ ...context.repo, issue_number: issue.number, body: thanks });
+            await github.rest.issues.update({ ...context.repo, issue_number: issue.number, state: 'closed', state_reason: 'completed' });
+      - name: Commit credit
+        if: env.CREDITED != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CONTRIBUTORS.md
+          git commit -m "Credit ${CREDITED} for a campus scan"
+          git push

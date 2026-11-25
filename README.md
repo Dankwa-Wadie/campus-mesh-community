@@ -9,7 +9,7 @@ Campus Mesh is an offline chat and campus app for GCTU. We're building 3D views 
 3. Upload the video somewhere we can download it: Google Drive, OneDrive or WeTransfer, with link sharing turned on.
 4. **[Submit your scan](https://github.com/Dankwa-Wadie/campus-mesh-community/issues/new?template=place-scan.yml)** with the link and the place you filmed.
 
-We review every video before using it. Once your scan is used in the map, your name is added to [CONTRIBUTORS.md](CONTRIBUTORS.md).
+We review every video before using it. When your scan is accepted, your name is added to [CONTRIBUTORS.md](CONTRIBUTORS.md) automatically, and you get a thank-you on your submission.
 
 ## What happens to your video
 

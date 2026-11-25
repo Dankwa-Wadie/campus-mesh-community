@@ -7,7 +7,7 @@ Campus Mesh is an offline chat and campus app for GCTU. We're building 3D views 
 1. Read the [capture guide](CAPTURE_GUIDE.md). It takes 2 minutes and makes the difference between a usable scan and a blurry one.
 2. Film the building, corridor or room.
 3. Upload the video somewhere we can download it: Google Drive, OneDrive or WeTransfer, with link sharing turned on.
-4. **[Submit your scan](../../issues/new?template=place-scan.yml)** with the link and the place you filmed.
+4. **[Submit your scan](https://github.com/Dankwa-Wadie/campus-mesh-community/issues/new?template=place-scan.yml)** with the link and the place you filmed.
 
 We review every video before using it. Once your scan is used in the map, your name is added to [CONTRIBUTORS.md](CONTRIBUTORS.md).
 

@@ -5,7 +5,7 @@ labels: ["scan"]
 body:
   - type: markdown
     attributes:
-      value: "Thanks for helping! Please read the [capture guide](../blob/main/CAPTURE_GUIDE.md) first."
+      value: "Thanks for helping! Please read the [capture guide](https://github.com/Dankwa-Wadie/campus-mesh-community/blob/main/CAPTURE_GUIDE.md) first."
   - type: dropdown
     id: place
     attributes:
